@@ -8,6 +8,19 @@ const messageChannel = consumer.subscriptions.create("MessageChannel", {
   },
 
   received(data) {
+    const messageDisplay = document.querySelector('#message-display')
+    messageDisplay.insertAdjacentHTML('beforeend', this.template(data))
+  },
+
+  template(data) {
+    return `<article class="message">
+              <div class="message-header">
+                <p>${data.user.email}</p>
+              </div>
+              <div class="message-body">
+                <p>${data.message.body}</p>
+              </div>
+            </article>`
   }
 });
 
@@ -21,6 +34,7 @@ document.addEventListener("turbolinks:load", () => {
       const message = {
         body: messageInput
       }
+      document.querySelector('#message-input').value = ''
       messageChannel.send({message: message})
     })
   }
